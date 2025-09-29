@@ -1,0 +1,23 @@
+
+# Base do Back-end e API
+Flask
+Flask-Cors
+gunicorn
+
+# Inteligência Artificial
+transformers
+torch
+torchvision
+Pillow
+accelerate
+
+# Tradução
+deep-translator
+
+# Utilitários
+python-dotenv
+
+# Text-to-Speech (TTS) - Descomente a linha do serviço que você escolher
+# google-cloud-texttospeech
+# boto3
+# elevenlabs

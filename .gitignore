@@ -1,0 +1,5 @@
+# Lumenvox/.gitignore
+.venv/
+uploads/
+__pycache__/
+google_credentials.json  # <-- Adicione esta linha
