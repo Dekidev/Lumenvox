@@ -11,3 +11,7 @@ google_credentials.json
 # arquivos de cache
 __pycache__/
 *.pyc
+
+*.bin filter=lfs diff=lfs merge=lfs -text
+*.mp4 filter=lfs diff=lfs merge=lfs -text
+*.zip filter=lfs diff=lfs merge=lfs -text
