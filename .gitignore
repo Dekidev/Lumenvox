@@ -1,5 +1,13 @@
-# Lumenvox/.gitignore
+# ambiente virtual do Python
 .venv/
-uploads/
+
+# a pasta do frontend
+frontend/
+
+# arquivos de variáveis de ambiente e credenciais
+.env
+google_credentials.json
+
+# arquivos de cache
 __pycache__/
-google_credentials.json  # <-- Adicione esta linha
+*.pyc

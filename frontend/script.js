@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
         );
       }
 
-      // 4. Pega a resposta (que é o áudio) e a toca
+      // 4. Pega a resposta (áudio) e a toca
       const audioBlob = await response.blob();
       const audioUrl = URL.createObjectURL(audioBlob);
       const audio = new Audio(audioUrl);
