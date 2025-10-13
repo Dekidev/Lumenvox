@@ -3,21 +3,102 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Lumenvox - Audiodescrição com IA</title>
+    <title>Lumenvox - Projeto de Inclusão Digital</title>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <main>
-      <h1>Lumenvox</h1>
-      <p>Faça o upload de uma imagem para gerar a audiodescrição.</p>
-
-      <div class="upload-container">
-        <input type="file" id="image-upload" accept="image/*" />
-        <button id="generate-button">Gerar Audiodescrição</button>
+    <header class="header">
+      <div class="container">
+        <div class="header__content">
+          <div class="logo"><h1 class="logo__text">🎧 Lumenvox</h1></div>
+          <nav class="nav">
+            <ul class="nav__list">
+              <li class="nav__item">
+                <button class="nav__link nav__link--active" data-tab="home">
+                  Home
+                </button>
+              </li>
+              <li class="nav__item">
+                <button class="nav__link" data-tab="sobre">Sobre</button>
+              </li>
+            </ul>
+          </nav>
+          <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu">
+            <span></span><span></span><span></span>
+          </button>
+        </div>
       </div>
+    </header>
 
-      <div id="status-area"></div>
+    <main class="main">
+      <section id="home-tab" class="tab-content tab-content--active">
+        <div class="hero">
+          <div class="container">
+            <div class="hero__content">
+              <h2 class="hero__title">
+                Gere audiodescrições para suas imagens com IA
+              </h2>
+              <p class="hero__subtitle">
+                Nossa inteligência artificial irá gerar audiodescrições precisas
+                para tornar seu conteúdo acessível a pessoas com deficiência
+                visual.
+              </p>
+
+              <div class="upload-component">
+                <div class="upload-zone" id="uploadZone">
+                  <div class="upload-zone__content">
+                    <div class="upload-icon">📁</div>
+                    <p class="upload-text">
+                      <strong>Clique para fazer upload</strong> ou arraste uma
+                      imagem aqui
+                    </p>
+                    <p class="upload-subtitle">
+                      Suporte para imagens (máx. 100MB)
+                    </p>
+                  </div>
+                  <input type="file" id="fileInput" accept="image/*" hidden />
+                </div>
+                <div id="fileList" class="file-list"></div>
+                <button id="uploadBtn" class="upload-btn" disabled>
+                  <span class="upload-btn__text">GERAR AUDIODESCRIÇÃO</span>
+                  <div class="upload-btn__loader"></div>
+                </button>
+
+                <div id="status-area"></div>
+
+                <div id="result-display-area" class="hidden">
+                  <div id="description-text-area">
+                    <p id="description-text-content"></p>
+                  </div>
+                </div>
+
+                <div id="feedback-section" class="hidden">
+                  <hr />
+                  <p>A audiodescrição foi útil?</p>
+                  <div class="feedback-buttons">
+                    <button id="good-feedback-btn">Gostei 👍</button>
+                    <button id="bad-feedback-btn">Não Gostei 👎</button>
+                  </div>
+                  <div id="correction-area" class="hidden">
+                    <label for="correction-text"
+                      >Qual seria sua descrição para essa imagem?</label
+                    >
+                    <textarea
+                      id="correction-text"
+                      rows="3"
+                      placeholder="Ex: Um cachorro marrom correndo na grama..."
+                    ></textarea>
+                    <button id="submit-correction-btn">Enviar Correção</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
 
     <script src="script.js"></script>
   </body>

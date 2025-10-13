@@ -1,53 +1,53 @@
-# Lumenvox/backend/app.py
-
 from dotenv import load_dotenv
 load_dotenv()
 
-from flask import Flask, request, send_file
+from urllib.parse import quote
+from flask import Flask, request, send_file, jsonify
 from services.caption_service import CaptionService
 from services.tts_service import TTSService
 from flask_cors import CORS
 import io
 
 app = Flask(__name__)
-CORS(app)
+# Diz ao navegador para permitir que o JavaScript leia o nosso cabeçalho customizado
+CORS(app, expose_headers=['X-Generated-Caption'])
 
-# Cria as instâncias dos nossos serviços
+
 print("Criando instâncias dos serviços...")
 caption_service = CaptionService()
 tts_service = TTSService()
-print("Instâncias criadas.")
+print("Serviços prontos para operar.")
+
 
 @app.route('/describe', methods=['POST'])
-def describe_image():
-    if 'image' not in request.files:
-        # Este tipo de erro retorna JSON
-        return {"error": "Nenhum arquivo de imagem enviado"}, 400
-
-    image_file = request.files['image']
-    if image_file.filename == '':
-        # Este tipo de erro retorna JSON
-        return {"error": "Arquivo de imagem inválido"}, 400
-
-    if image_file:
-        # --- LÓGICA PRINCIPAL ---
-        # 1. Gera a descrição em texto
-        description_text = caption_service.generate_caption(image_file.stream)
-        
-        # 2. Converte o texto em áudio
+def describe_image_endpoint():
+    if 'image' not in request.files: return jsonify({"error": "Nenhum arquivo de imagem enviado."}), 400
+    uploaded_image = request.files['image']
+    if not uploaded_image or uploaded_image.filename == '': return jsonify({"error": "O arquivo enviado é inválido."}), 400
+    
+    try:
+        description_text = caption_service.generate_caption(uploaded_image.stream)
         audio_bytes = tts_service.synthesize_speech(description_text)
         
-        # 3. Retorna o ARQUIVO DE ÁUDIO (e não mais um JSON)
-        return send_file(
-            io.BytesIO(audio_bytes),
-            mimetype='audio/mpeg',
-            as_attachment=True, # Força o download
-            download_name='descricao.mp3'
-        )
+        response = send_file(io.BytesIO(audio_bytes), mimetype='audio/mpeg')
+        
+        # --- MELHORIA APLICADA AQUI ---
+        # Usamos quote() para garantir que caracteres especiais (como acentos)
+        # sejam enviados corretamente no cabeçalho.
+        response.headers['X-Generated-Caption'] = quote(description_text)
+        
+        return response
+    except Exception as e:
+        print(f"ERRO INESPERADO NA ROTA /describe: {e}")
+        return jsonify({"error": "Um erro inesperado ocorreu no servidor."}), 500
+
+@app.route('/feedback', methods=['POST'])
+def handle_feedback():
+    return jsonify({"status": "Feedback recebido com sucesso!"})
 
 @app.route('/', methods=['GET'])
-def health_check():
-    return {"status": "API do Lumenvox está no ar e funcionando!"}
+def health_check_endpoint():
+    return jsonify({"status": "API do Lumenvox está no ar e funcionando!"})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
